@@ -2,20 +2,34 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 10%;
   padding: 20px;
   color: white;
 }
 
+.main-button {
+  margin-left: 1rem;
+  font-weight: 600;
+}
+
 .App-intro {
   font-size: large;
+}
+
+.parent-div {
+  width:100%;
+}
+
+.left-div {
+  float:left;
+  width:50%;
+}
+
+.right-div {
+  float:right;
+  width:50%;
 }
 
 @keyframes App-logo-spin {
