@@ -134,7 +134,9 @@ handleOnChange (value) {
               }
             </div>
           </div>
-          <input className="input-submit" type="submit" value="Submit" />
+          <div className="input-submit">
+            <input  type="submit" value="Submit" />
+          </div>
         </form>
       </div>
     )

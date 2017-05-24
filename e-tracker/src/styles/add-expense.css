@@ -20,13 +20,14 @@
 }
 
 .input-catagory {
-  margin-right: 5.8rem;
+  margin-right: 13.8rem;
   float: right;
   width: 47.5%;
 }
 
 .input-submit {
   margin-top: 3rem;
+  margin-left: -32.5rem;
 }
 
 .input-add-catagory {

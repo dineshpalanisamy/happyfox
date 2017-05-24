@@ -19,5 +19,27 @@
 
 .input-type {
   margin-top: 0.75rem;
-  margin-left: 2rem;
+  margin-left: 5rem;
+}
+
+.multi-dropdown{
+  margin-right: 13.8rem;
+  float: right;
+  width: 42%;
+  margin-top: 2.75rem;
+}
+
+.dropdown-label{
+  float: left;
+  margin-left: -5rem;
+  margin-top: 2.7rem;
+}
+
+.input-add-catagory {
+  margin-left: 9.75rem;
+  margin-top: 1rem;
+  width: 9.1rem;
+}
+.view-expense-button{
+  margin-top: 2rem;
 }
