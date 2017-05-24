@@ -6,3 +6,30 @@
 .expense-properties {
   margin: 1rem;
 }
+
+.input-title {
+  margin-left: 4rem;
+}
+
+.input-amount {
+  margin-left: 2.4rem;
+}
+
+.input-notes {
+  margin-left: 3.25rem;
+}
+
+.input-catagory {
+  margin-right: 5.8rem;
+  float: right;
+  width: 47.5%;
+}
+
+.input-submit {
+  margin-top: 3rem;
+}
+
+.input-add-catagory {
+  margin-left: 7.45rem;
+  margin-top: 1rem;
+}

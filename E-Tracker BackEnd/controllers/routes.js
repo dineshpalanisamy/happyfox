@@ -2,7 +2,15 @@ var model = require('../models/schema');
 module.exports = function(app) {
 
 	app.get('/', function(req, res){
-	    res.end("Hello Happyfox");
+	    res.send(JSON.stringify({"msg":"hello"}));
+	});
+
+	app.options('/', (req, res) => {
+	    res.header("Access-Control-Allow-Origin", "*");
+	    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,PATCH,DELETE");
+	    res.header("Access-Control-Allow-Headers", "Content-Type");
+	    res.setHeader('Content-Type', 'application/json');
+		res.status(200).send('');
 	});
 
   app.post('/add_expense', function(req, res){
@@ -19,9 +27,9 @@ module.exports = function(app) {
 
       newexpense.save(function(err, savedExpense){
         if(err){
-          console.log(err);
+          return res.status(400).send(JSON.stringify({"msg":"failed"}));
         }
-        return res.status(200).send();
+        return res.status(200).send(JSON.stringify({"msg":"Successfully saved"}));
       })
   });
 }
