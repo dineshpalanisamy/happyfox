@@ -61,4 +61,18 @@ module.exports = function(app) {
 			}
 		}
 	})
+
+app.get('/get_catagory',function(req,res){
+	model.Expense.distinct('catagory', function(err, catagories) {
+		if(err){
+			console.log(err)
+		}
+		var result = [];
+		catagories.forEach(function(cat){
+			result.push({value:cat,label:cat})
+		})
+		return res.status(200).send(result)
+})
+})
+
 }

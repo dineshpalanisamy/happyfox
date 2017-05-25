@@ -10,20 +10,11 @@ export default class ViewExpense extends Component {
     dateValue: '',
     weekValue: '',
     monthValue: '',
-    addCatagory: '',
     multi: true,
     responseSuccess: false,
     totalExpense: '',
-    showAddCatagory: false,
     multiValue: [],
-    totalCatagory:[],
-    options: [
-      { value: 'fuel', label: 'Fuel' },
-      { value: 'food', label: 'Food' },
-      { value: 'electronics', label: 'Electronics' },
-      { value: 'shopping', label: 'Shopping'},
-      { value: 'new', label: 'Other'}
-    ],
+    options: [],
     value: undefined
   };
   this._onDropdownSelect = this._onDropdownSelect.bind(this)
@@ -31,7 +22,6 @@ export default class ViewExpense extends Component {
   this._onWeekSelect = this._onWeekSelect.bind(this)
   this._onMonthSelect = this._onMonthSelect.bind(this)
   this.handleOnChange = this.handleOnChange.bind(this)
-  this.handleAddCatagoryChange = this.handleAddCatagoryChange.bind(this)
   this.handleSubmit = this.handleSubmit.bind(this)
 }
 _onDropdownSelect(e) {
@@ -40,14 +30,26 @@ _onDropdownSelect(e) {
 shouldComponentUpdate(nextProps, nextState) {
     return true
 }
+componentWillMount() {
+  fetch('http://127.0.0.1:3000/get_catagory', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }).then(function(response) {
+    if(response.ok){
+      console.log("ok")
+    }
+    return response.json();
+  }.bind(this)).then(function(data) {
+    this.setState({options: data})
+  }.bind(this));
+}
 handleOnChange (value) {
-  this.setState({showAddCatagory: false});
   var catArray = [];
   value.map((val)=>{
     catArray.push(val.value)
-    if(val.value === 'new'){
-      this.setState({showAddCatagory: true})
-    }
   })
   const { multi } = this.state;
 	if (multi) {
@@ -78,16 +80,8 @@ _onWeekSelect(e) {
 _onMonthSelect(e) {
   this.setState({monthValue:e.target.value})
 }
-handleAddCatagoryChange(e){
-  this.setState({addCatagory:e.target.value})
-}
 
 handleSubmit(e) {
-  this.state.totalCatagory = this.state.multiValue
-  console.log(this.state.multiValue)
-  if(this.state.addCatagory.length > 0){
-    this.state.totalCatagory.push(this.state.addCatagory)
-  }
   fetch('http://127.0.0.1:3000/view_expense', {
     method: 'POST',
     headers: {
@@ -97,7 +91,7 @@ handleSubmit(e) {
     body: JSON.stringify({
       filterBy:this.state.filterBy,
       date:this.state.dateValue,
-      catagory : this.state.totalCatagory
+      catagory : this.state.multiValue
     })
   }).then(function(response) {
     if(response.ok){
@@ -144,14 +138,6 @@ handleSubmit(e) {
           <div><p className="dropdown-label">Select Catagory</p></div>
           <div className="multi-dropdown">
             {this.multiSelectDropdown()}
-          </div>
-          <div className="">
-            {this.state.showAddCatagory ?
-              <div>
-                <input className="input-add-catagory" value={this.state.addCatagory} onChange={this.handleAddCatagoryChange} type="text" name="add-catagory" placeholder="add catagory" /><br/>
-              </div> :
-              null
-            }
           </div>
           <input type="submit" className="view-expense-button"></input>
         </div>
