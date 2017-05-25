@@ -86,6 +86,38 @@ module.exports = function(app) {
 		}
 	}
 
+	function filterByMonth(req,res){
+		var catagory = req.body.catagory;
+		var monthdate = new Date(req.body.value.substring(0,4)+"-"+req.body.value.substring(6,8)+"-"+01)
+		var startdate = new Date(monthdate.getFullYear(), monthdate.getMonth(), 1);
+		var endDate = new Date(monthdate.getFullYear(), monthdate.getMonth() + 1, 0);
+		if(catagory.length > 0){
+			model.Expense.find({"added_date": {"$gte": startdate, "$lt": endDate},
+														catagory: {  "$in" : catagory }}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+		else {
+			model.Expense.find({ "added_date": {"$gte": startdate, "$lt": endDate}}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+	}
+
 	function getDateOfWeek(w, y) {
 		console.log("week" +w+"year"+y)
     var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
@@ -105,6 +137,9 @@ function addDays(dateObj, numDays) {
 		}
 		else if(filterBy=='week'){
 			filterByWeek(req,res)
+		}
+		else if(filterBy=='month'){
+			filterByMonth(req,res)
 		}
 	})
 
