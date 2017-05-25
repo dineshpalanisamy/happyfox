@@ -62,10 +62,10 @@ multiSelectDropdown() {
 }
 
 _onDateSelect(e) {
+  console.log(e.target.value)
   this.setState({dateValue:e.target.value})
 }
 _onWeekSelect(e) {
-  console.log(e.target.value)
   this.setState({weekValue:e.target.value})
 }
 _onMonthSelect(e) {
