@@ -25,40 +25,42 @@ module.exports = function(app) {
       })
   });
 
+	function filterByDate(req,res){
+		var date = req.body.date;
+		var catagory = req.body.catagory;
+		if(catagory.length > 0){
+			model.Expense.find({ '$where': "this.added_date.toJSON().slice(0, 10) == '"+date+"'",
+														catagory: {  "$in" : catagory }}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+		else {
+			model.Expense.find({ '$where': "this.added_date.toJSON().slice(0, 10) == '"+date+"'"}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+	}
+
 	app.post('/view_expense', function (req, res) {
 		var filterBy = req.body.filterBy;
 		console.log(req.body)
 
 		if(filterBy=='date'){
-			var date = req.body.date;
-			var catagory = req.body.catagory;
-			if(catagory.length > 0){
-				model.Expense.find({ '$where': "this.added_date.toJSON().slice(0, 10) == '"+date+"'",
-															catagory: {  "$in" : catagory }}, function(err,docs){
-					if(err){
-						return res.status(400).send(JSON.stringify({"msg":"failed"}));
-					}
-					var total = 0;
-					docs.forEach(function(doc){
-						total += doc.amount
-					})
-
-					return res.status(200).send(JSON.stringify({"expense":total}))
-				})
-			}
-			else {
-				model.Expense.find({ '$where': "this.added_date.toJSON().slice(0, 10) == '"+date+"'"}, function(err,docs){
-					if(err){
-						return res.status(400).send(JSON.stringify({"msg":"failed"}));
-					}
-					var total = 0;
-					docs.forEach(function(doc){
-						total += doc.amount
-					})
-					console.log(total)
-					return res.status(200).send(JSON.stringify({"expense":total}))
-				})
-			}
+			filterByDate(req,res)
 		}
 	})
 
