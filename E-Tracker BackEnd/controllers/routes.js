@@ -5,13 +5,6 @@ module.exports = function(app) {
 	    res.send(JSON.stringify({"msg":"hello"}));
 	});
 
-	app.options('/', (req, res) => {
-	    res.header("Access-Control-Allow-Origin", "*");
-	    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,PATCH,DELETE");
-	    res.header("Access-Control-Allow-Headers", "Content-Type");
-	    res.setHeader('Content-Type', 'application/json');
-		res.status(200).send('');
-	});
   app.post('/add_expense', function(req, res){
       var title = req.body.title;
       var amount = req.body.amount;
@@ -34,6 +27,7 @@ module.exports = function(app) {
 
 	app.post('/view_expense', function (req, res) {
 		var filterBy = req.body.filterBy;
+		console.log(req.body)
 
 		if(filterBy=='date'){
 			var date = req.body.date;
@@ -49,7 +43,7 @@ module.exports = function(app) {
 						total += doc.amount
 					})
 
-					return res.status(200).send(JSON.stringify({"msg":total}))
+					return res.status(200).send(JSON.stringify({"expense":total}))
 				})
 			}
 			else {
@@ -61,8 +55,8 @@ module.exports = function(app) {
 					docs.forEach(function(doc){
 						total += doc.amount
 					})
-
-					return res.status(200).send(JSON.stringify({"msg":total}))
+					console.log(total)
+					return res.status(200).send(JSON.stringify({"expense":total}))
 				})
 			}
 		}

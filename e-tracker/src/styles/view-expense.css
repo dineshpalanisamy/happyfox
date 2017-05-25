@@ -43,3 +43,8 @@
 .view-expense-button{
   margin-top: 2rem;
 }
+
+.result-div {
+  margin-top: 5%;
+  color: red;
+}

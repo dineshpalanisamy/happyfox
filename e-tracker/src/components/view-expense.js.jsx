@@ -12,8 +12,11 @@ export default class ViewExpense extends Component {
     monthValue: '',
     addCatagory: '',
     multi: true,
+    responseSuccess: false,
+    totalExpense: '',
     showAddCatagory: false,
     multiValue: [],
+    totalCatagory:[],
     options: [
       { value: 'fuel', label: 'Fuel' },
       { value: 'food', label: 'Food' },
@@ -33,6 +36,9 @@ export default class ViewExpense extends Component {
 }
 _onDropdownSelect(e) {
   this.setState({filterBy:e.target.value})
+}
+shouldComponentUpdate(nextProps, nextState) {
+    return true
 }
 handleOnChange (value) {
   this.setState({showAddCatagory: false});
@@ -75,10 +81,12 @@ _onMonthSelect(e) {
 handleAddCatagoryChange(e){
   this.setState({addCatagory:e.target.value})
 }
+
 handleSubmit(e) {
-  var catArray = this.state.multiValue
+  this.state.totalCatagory = this.state.multiValue
+  console.log(this.state.multiValue)
   if(this.state.addCatagory.length > 0){
-    catArray.push(this.state.addCatagory)
+    this.state.totalCatagory.push(this.state.addCatagory)
   }
   fetch('http://127.0.0.1:3000/view_expense', {
     method: 'POST',
@@ -89,21 +97,18 @@ handleSubmit(e) {
     body: JSON.stringify({
       filterBy:this.state.filterBy,
       date:this.state.dateValue,
-      catagory : this.state.multiValue
+      catagory : this.state.totalCatagory
     })
   }).then(function(response) {
-    if (response.ok) {
-      console.log(response.ok)
-      return response;
+    if(response.ok){
+      this.setState({responseSuccess: true})
     }
-    throw Error(response.statusText);
-  }).then(function(response) {
     return response.json();
-  }).then(function(json) {
-    console.log('Request succeeded with JSON response:', json);
-  }).catch(function(error) {
-    console.log('Request failed:', error.message);
-  });
+  }.bind(this)).then(function(data) {
+    console.log(data)
+    this.setState({totalExpense: data.expense})
+  }.bind(this));
+
   e.preventDefault();
 }
 
@@ -151,6 +156,9 @@ handleSubmit(e) {
           <input type="submit" className="view-expense-button"></input>
         </div>
         </form>
+        <div className="result-div">
+          {this.state.responseSuccess ? <p>you have spent {this.state.totalExpense}</p> : null}
+        </div>
       </div>
     )
   }
