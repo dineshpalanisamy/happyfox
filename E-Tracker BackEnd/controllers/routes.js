@@ -26,7 +26,7 @@ module.exports = function(app) {
   });
 
 	function filterByDate(req,res){
-		var date = req.body.date;
+		var date = req.body.value;
 		var catagory = req.body.catagory;
 		if(catagory.length > 0){
 			model.Expense.find({ '$where': "this.added_date.toJSON().slice(0, 10) == '"+date+"'",
@@ -55,12 +55,56 @@ module.exports = function(app) {
 		}
 	}
 
+	function filterByWeek(req,res){
+		var catagory = req.body.catagory;
+		var startdate = getDateOfWeek(req.body.value.substring(6,8), req.body.value.substring(0,4))
+		var endDate=new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate()+7)
+		if(catagory.length > 0){
+			model.Expense.find({"added_date": {"$gte": startdate, "$lt": endDate},
+														catagory: {  "$in" : catagory }}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+		else {
+			model.Expense.find({ "added_date": {"$gte": startdate, "$lt": endDate}}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+	}
+
+	function getDateOfWeek(w, y) {
+		console.log("week" +w+"year"+y)
+    var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
+
+    return new Date(y, 0, d);
+}
+function addDays(dateObj, numDays) {
+  return dateObj.setDate(dateObj.getDate() + numDays);
+}
+
 	app.post('/view_expense', function (req, res) {
 		var filterBy = req.body.filterBy;
 		console.log(req.body)
 
 		if(filterBy=='date'){
 			filterByDate(req,res)
+		}
+		else if(filterBy=='week'){
+			filterByWeek(req,res)
 		}
 	})
 

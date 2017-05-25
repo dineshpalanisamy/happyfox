@@ -8,8 +8,6 @@ export default class ViewExpense extends Component {
   this.state = {
     filterBy: 'date',
     dateValue: '',
-    weekValue: '',
-    monthValue: '',
     multi: true,
     responseSuccess: false,
     totalExpense: '',
@@ -19,8 +17,6 @@ export default class ViewExpense extends Component {
   };
   this._onDropdownSelect = this._onDropdownSelect.bind(this)
   this._onDateSelect = this._onDateSelect.bind(this)
-  this._onWeekSelect = this._onWeekSelect.bind(this)
-  this._onMonthSelect = this._onMonthSelect.bind(this)
   this.handleOnChange = this.handleOnChange.bind(this)
   this.handleSubmit = this.handleSubmit.bind(this)
 }
@@ -74,12 +70,6 @@ _onDateSelect(e) {
   console.log(e.target.value)
   this.setState({dateValue:e.target.value})
 }
-_onWeekSelect(e) {
-  this.setState({weekValue:e.target.value})
-}
-_onMonthSelect(e) {
-  this.setState({monthValue:e.target.value})
-}
 
 handleSubmit(e) {
   fetch('http://127.0.0.1:3000/view_expense', {
@@ -90,7 +80,7 @@ handleSubmit(e) {
     },
     body: JSON.stringify({
       filterBy:this.state.filterBy,
-      date:this.state.dateValue,
+      value:this.state.dateValue,
       catagory : this.state.multiValue
     })
   }).then(function(response) {
@@ -125,10 +115,10 @@ handleSubmit(e) {
             </div> :
             (this.state.filterBy === 'week' ?
             <div>
-            <input type="week" className="input-type" value={this.state.weekValue} onChange={this._onWeekSelect}/>
+            <input type="week" className="input-type" value={this.state.dateValue} onChange={this._onDateSelect}/>
             </div> :
             <div>
-            <input type="month" className="input-type" value={this.state.monthValue} onChange={this._onMonthSelect}/>
+            <input type="month" className="input-type" value={this.state.dateValue} onChange={this._onDateSelect}/>
             </div>
           )
           }
