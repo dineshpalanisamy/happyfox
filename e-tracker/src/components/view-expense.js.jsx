@@ -29,6 +29,7 @@ export default class ViewExpense extends Component {
   this._onMonthSelect = this._onMonthSelect.bind(this)
   this.handleOnChange = this.handleOnChange.bind(this)
   this.handleAddCatagoryChange = this.handleAddCatagoryChange.bind(this)
+  this.handleSubmit = this.handleSubmit.bind(this)
 }
 _onDropdownSelect(e) {
   this.setState({filterBy:e.target.value})
@@ -74,10 +75,42 @@ _onMonthSelect(e) {
 handleAddCatagoryChange(e){
   this.setState({addCatagory:e.target.value})
 }
+handleSubmit(e) {
+  var catArray = this.state.multiValue
+  if(this.state.addCatagory.length > 0){
+    catArray.push(this.state.addCatagory)
+  }
+  fetch('http://127.0.0.1:3000/view_expense', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      filterBy:this.state.filterBy,
+      date:this.state.dateValue,
+      catagory : this.state.multiValue
+    })
+  }).then(function(response) {
+    if (response.ok) {
+      console.log(response.ok)
+      return response;
+    }
+    throw Error(response.statusText);
+  }).then(function(response) {
+    return response.json();
+  }).then(function(json) {
+    console.log('Request succeeded with JSON response:', json);
+  }).catch(function(error) {
+    console.log('Request failed:', error.message);
+  });
+  e.preventDefault();
+}
 
   render(){
     return (
       <div className="child-right-div">
+      <form onSubmit={this.handleSubmit} method="post">
         <label className="header-label">Filter By:</label>
         <select className="dropdown" value={this.state.filterBy} onChange={this._onDropdownSelect}>
           <option value="date"> Date </option>
@@ -115,8 +148,9 @@ handleAddCatagoryChange(e){
               null
             }
           </div>
-          <button className="view-expense-button">View Expense</button>
+          <input type="submit" className="view-expense-button"></input>
         </div>
+        </form>
       </div>
     )
   }

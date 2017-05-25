@@ -10,7 +10,7 @@ export default class LeftDiv extends Component {
     const {component} = this.props;
     console.log(component)
     return (
-      component == 'add-expense' ?
+      component === 'add-expense' ?
         <AddExpense /> : <AddedExpense/>
     )
   }

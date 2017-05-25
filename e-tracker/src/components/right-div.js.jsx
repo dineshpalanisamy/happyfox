@@ -8,7 +8,7 @@ export default class RightDiv extends Component {
   render(){
     const {component} = this.props;
     return (
-      component == 'view-expense' ?
+      component === 'view-expense' ?
         <ViewExpense /> : null
     )
   }

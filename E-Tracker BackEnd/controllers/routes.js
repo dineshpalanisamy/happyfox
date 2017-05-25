@@ -12,7 +12,6 @@ module.exports = function(app) {
 	    res.setHeader('Content-Type', 'application/json');
 		res.status(200).send('');
 	});
-
   app.post('/add_expense', function(req, res){
       var title = req.body.title;
       var amount = req.body.amount;
@@ -39,11 +38,11 @@ module.exports = function(app) {
 		if(filterBy=='date'){
 			var date = req.body.date;
 			var catagory = req.body.catagory;
-			if(catagory){
+			if(catagory.length > 0){
 				model.Expense.find({ '$where': "this.added_date.toJSON().slice(0, 10) == '"+date+"'",
 															catagory: {  "$in" : catagory }}, function(err,docs){
 					if(err){
-						console.log(err);
+						return res.status(400).send(JSON.stringify({"msg":"failed"}));
 					}
 					var total = 0;
 					docs.forEach(function(doc){
@@ -56,7 +55,7 @@ module.exports = function(app) {
 			else {
 				model.Expense.find({ '$where': "this.added_date.toJSON().slice(0, 10) == '"+date+"'"}, function(err,docs){
 					if(err){
-						console.log(err);
+						return res.status(400).send(JSON.stringify({"msg":"failed"}));
 					}
 					var total = 0;
 					docs.forEach(function(doc){
