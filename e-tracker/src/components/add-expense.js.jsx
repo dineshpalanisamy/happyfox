@@ -132,7 +132,7 @@ handleOnChange (value) {
             <div className="">
               {this.state.showAddCatagory ?
                 <div>
-                  <input className="input-add-catagory" value={this.state.addCatagory} onChange={this.handleAddCatagoryChange} type="text" name="add-catagory" placeholder="add catagory" /><br/>
+                  <input className="add-input-catagory" value={this.state.addCatagory} onChange={this.handleAddCatagoryChange} type="text" name="add-catagory" placeholder="add catagory" /><br/>
                 </div> :
                 null
               }
