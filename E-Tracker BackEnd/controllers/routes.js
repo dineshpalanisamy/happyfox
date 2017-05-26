@@ -1,10 +1,6 @@
 var model = require('../models/schema');
 module.exports = function(app) {
 
-	app.get('/', function(req, res){
-	    res.send(JSON.stringify({"msg":"hello"}));
-	});
-
   app.post('/add_expense', function(req, res){
       var title = req.body.title;
       var amount = req.body.amount;
@@ -24,6 +20,36 @@ module.exports = function(app) {
         return res.status(200).send(JSON.stringify({"msg":"Successfully saved"}));
       })
   });
+
+	function filterByWeek(req,res){
+		var catagory = req.body.catagory;
+		var startdate = getDateOfWeek(req.body.value.substring(6,8), req.body.value.substring(0,4))
+		var endDate=new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate()+7)
+		if(catagory.length > 0){
+			model.Expense.find({"added_date": {"$gte": startdate, "$lt": endDate}, catagory: {  "$in" : catagory }}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+		else {
+			model.Expense.find({ "added_date": {"$gte": startdate, "$lt": endDate}}, function(err,docs){
+				if(err){
+					return res.status(400).send(JSON.stringify({"msg":"failed"}));
+				}
+				var total = 0;
+				docs.forEach(function(doc){
+					total += doc.amount
+				})
+				return res.status(200).send(JSON.stringify({"expense":total}))
+			})
+		}
+	}
 
 	function filterByDate(req,res){
 		var date = req.body.value;
@@ -55,45 +81,13 @@ module.exports = function(app) {
 		}
 	}
 
-	function filterByWeek(req,res){
-		var catagory = req.body.catagory;
-		var startdate = getDateOfWeek(req.body.value.substring(6,8), req.body.value.substring(0,4))
-		var endDate=new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate()+7)
-		if(catagory.length > 0){
-			model.Expense.find({"added_date": {"$gte": startdate, "$lt": endDate},
-														catagory: {  "$in" : catagory }}, function(err,docs){
-				if(err){
-					return res.status(400).send(JSON.stringify({"msg":"failed"}));
-				}
-				var total = 0;
-				docs.forEach(function(doc){
-					total += doc.amount
-				})
-				return res.status(200).send(JSON.stringify({"expense":total}))
-			})
-		}
-		else {
-			model.Expense.find({ "added_date": {"$gte": startdate, "$lt": endDate}}, function(err,docs){
-				if(err){
-					return res.status(400).send(JSON.stringify({"msg":"failed"}));
-				}
-				var total = 0;
-				docs.forEach(function(doc){
-					total += doc.amount
-				})
-				return res.status(200).send(JSON.stringify({"expense":total}))
-			})
-		}
-	}
-
 	function filterByMonth(req,res){
 		var catagory = req.body.catagory;
 		var monthdate = new Date(req.body.value.substring(0,4)+"-"+req.body.value.substring(6,8)+"-"+01)
 		var startdate = new Date(monthdate.getFullYear(), monthdate.getMonth(), 1);
 		var endDate = new Date(monthdate.getFullYear(), monthdate.getMonth() + 1, 0);
 		if(catagory.length > 0){
-			model.Expense.find({"added_date": {"$gte": startdate, "$lt": endDate},
-														catagory: {  "$in" : catagory }}, function(err,docs){
+			model.Expense.find({"added_date": {"$gte": startdate, "$lt": endDate}, catagory: {  "$in" : catagory }}, function(err,docs){
 				if(err){
 					return res.status(400).send(JSON.stringify({"msg":"failed"}));
 				}
@@ -119,8 +113,7 @@ module.exports = function(app) {
 	}
 
 	function getDateOfWeek(w, y) {
-    var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
-
+    var d = (1 + (w - 1) * 7);
     return new Date(y, 0, d);
 }
 function addDays(dateObj, numDays) {
@@ -142,19 +135,19 @@ function addDays(dateObj, numDays) {
 		}
 	})
 
-app.get('/get_catagory',function(req,res){
-	model.Expense.distinct('catagory', function(err, catagories) {
-		if(err){
-			console.log(err)
-		}
-		var result = [];
-		catagories.forEach(function(cat){
-			if(cat != 'new'){
-				result.push({value:cat,label:cat})
+	app.get('/get_catagory',function(req,res){
+		model.Expense.distinct('catagory', function(err, catagories) {
+			if(err){
+				return res.status(400).send(JSON.stringify({"msg":"failed"}));
 			}
+			var result = [];
+			catagories.forEach(function(cat){
+				if(cat != 'new'){
+					result.push({value:cat,label:cat})
+				}
+			})
+			return res.status(200).send(result)
 		})
-		return res.status(200).send(result)
-})
-})
+	})
 
 }

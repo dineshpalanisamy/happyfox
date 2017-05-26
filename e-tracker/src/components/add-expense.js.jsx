@@ -115,10 +115,10 @@ handleOnChange (value) {
             <p>Expense Adder Widget</p>
             <br/>
             <div className="expense-properties">
-              <label>Title: </label> <input className="input-title" value={this.state.title} onChange={this.handleTitleChange} type="text" name="title" />
+              <label>Title: </label> <input className="input-title" value={this.state.title} onChange={this.handleTitleChange} type="text" name="title" required/>
             </div>
               <div className="expense-properties">
-            <label>Amount: </label> <input className="input-amount" value={this.state.amount} onChange={this.handleAmountChange} type="text" name="amount" /><br/>
+            <label>Amount: </label> <input className="input-amount" value={this.state.amount} onChange={this.handleAmountChange} type="text" name="amount" required/><br/>
               </div>
             <div className="expense-properties">
               <label>Notes: </label> <input className="input-notes" value={this.state.notes} onChange={this.handleNotesChange} type="text" name="notes" /><br/>
