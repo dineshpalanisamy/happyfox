@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AddExpense from './components/add-expense.js.jsx';
 import LeftDiv from './components/left-div.js.jsx';
 import RightDiv from './components/right-div.js.jsx';
 import './App.css';

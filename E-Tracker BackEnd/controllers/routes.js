@@ -119,7 +119,6 @@ module.exports = function(app) {
 	}
 
 	function getDateOfWeek(w, y) {
-		console.log("week" +w+"year"+y)
     var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
 
     return new Date(y, 0, d);

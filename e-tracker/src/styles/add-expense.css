@@ -36,3 +36,8 @@
   margin-top: 1rem;
   width: 25.5%;
 }
+
+.success-added-toast {
+  text-align: left;
+  margin-left: 8%;
+}

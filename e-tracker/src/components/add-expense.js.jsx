@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/add-expense.css';
 import 'react-select/dist/react-select.css';
-import LeftDiv from './left-div.js.jsx'
 var Select = require('react-select');
 
 export default class AddExpense extends Component {
@@ -39,6 +38,7 @@ shouldComponentUpdate(nextProps, nextState) {
 handleOnChange (value) {
   this.setState({showAddCatagory: false});
   var catArray = [];
+  // eslint-disable-next-line
   value.map((val)=>{
     catArray.push(val.value)
     if(val.value === 'new'){
@@ -103,10 +103,7 @@ handleOnChange (value) {
       this.forceUpdate()
       return response.json();
     }.bind(this)).then(function(data) {
-      console.log(data)
-    }.bind(this));
-    console.log("hi")
-    console.log(this.state.responseSuccess)
+    });
     e.preventDefault();
   }
 
@@ -142,7 +139,7 @@ handleOnChange (value) {
             <input  type="submit" value="Submit" />
           </div>
         </form>
-        {this.state.responseSuccess ? <p>{this.state.title} Added Successfully</p>:null}
+        {this.state.responseSuccess ? <p class="success-added-toast">{this.state.title} Added Successfully</p>:null}
       </div>
     )
   }

@@ -34,16 +34,14 @@ componentWillMount() {
       'Content-Type': 'application/json',
     }
   }).then(function(response) {
-    if(response.ok){
-      console.log("ok")
-    }
     return response.json();
-  }.bind(this)).then(function(data) {
+  }).then(function(data) {
     this.setState({options: data})
   }.bind(this));
 }
 handleOnChange (value) {
   var catArray = [];
+  // eslint-disable-next-line
   value.map((val)=>{
     catArray.push(val.value)
   })
@@ -67,7 +65,6 @@ multiSelectDropdown() {
 }
 
 _onDateSelect(e) {
-  console.log(e.target.value)
   this.setState({dateValue:e.target.value})
 }
 
