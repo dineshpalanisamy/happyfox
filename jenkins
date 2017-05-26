@@ -1,0 +1,7 @@
+#start at port 9090
+
+java -jar jenkins.war --ajp13Port=-1 --httpPort=9090
+
+#credentials
+username: cptn_jack_sprw
+password: Imperial5robert!
