@@ -6,32 +6,35 @@
 }
 
 .dropdown {
-  margin-left: 2rem;
+  margin-left: 15%;
+  width: 24%;
 }
 
 .filter-area {
-  margin-top: 7rem;
+  margin-top: 7%;
 }
 
 .filter-label {
   float: left;
+  width: 15%
 }
 
 .input-type {
   margin-top: 0.75rem;
-  margin-left: 5rem;
+  margin-left: 9.75%;
+  width: 23%;
 }
 
 .multi-dropdown{
-  margin-right: 13.8rem;
+  margin-right: 51%;
   float: right;
-  width: 42%;
+  width: 24.75%;
   margin-top: 2.75rem;
 }
 
 .dropdown-label{
   float: left;
-  margin-left: -5rem;
+  margin-left: -15%;
   margin-top: 2.7rem;
 }
 
@@ -41,7 +44,7 @@
   width: 9.1rem;
 }
 .view-expense-button{
-  margin-top: 2rem;
+  margin-top: 14%;
 }
 
 .result-div {

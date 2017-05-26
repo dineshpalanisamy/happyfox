@@ -109,19 +109,7 @@ handleSubmit(e) {
         <div className="filter-area">
           <p className="filter-label"> Select {this.state.filterBy}</p>
           <div>
-          {this.state.filterBy === 'date' ?
-            <div>
-            <input type="date" className="input-type" value={this.state.dateValue} onChange={this._onDateSelect}/>
-            </div> :
-            (this.state.filterBy === 'week' ?
-            <div>
-            <input type="week" className="input-type" value={this.state.dateValue} onChange={this._onDateSelect}/>
-            </div> :
-            <div>
-            <input type="month" className="input-type" value={this.state.dateValue} onChange={this._onDateSelect}/>
-            </div>
-          )
-          }
+            <input type={this.state.filterBy} className="input-type" value={this.state.dateValue} onChange={this._onDateSelect}/>
           </div>
         </div>
         <div>
