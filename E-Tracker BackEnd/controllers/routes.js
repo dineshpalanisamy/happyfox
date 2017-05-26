@@ -150,7 +150,9 @@ app.get('/get_catagory',function(req,res){
 		}
 		var result = [];
 		catagories.forEach(function(cat){
-			result.push({value:cat,label:cat})
+			if(cat != 'new'){
+				result.push({value:cat,label:cat})
+			}
 		})
 		return res.status(200).send(result)
 })
