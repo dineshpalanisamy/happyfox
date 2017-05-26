@@ -23,6 +23,7 @@ export default class AddExpense extends Component {
     notes:'',
     addCatagory:'',
     addedSuccess: '',
+    responseSuccess:false,
     value: undefined
   };
   this.handleOnChange = this.handleOnChange.bind(this);
@@ -31,6 +32,9 @@ export default class AddExpense extends Component {
   this.handleNotesChange = this.handleNotesChange.bind(this);
   this.handleAddCatagoryChange = this.handleAddCatagoryChange.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
+}
+shouldComponentUpdate(nextProps, nextState) {
+    return true
 }
 handleOnChange (value) {
   this.setState({showAddCatagory: false});
@@ -62,16 +66,17 @@ handleOnChange (value) {
   }
 
   handleTitleChange(e) {
-    this.setState({title : e.target.value})
+    this.setState({title : e.target.value, responseSuccess : false})
   }
   handleAmountChange(e) {
-    this.setState({amount : e.target.value})
+    this.setState({amount : e.target.value, responseSuccess : false})
   }
   handleNotesChange(e) {
-    this.setState({notes : e.target.value})
+    this.setState({notes : e.target.value, responseSuccess : false})
+
   }
   handleAddCatagoryChange(e) {
-    this.setState({addCatagory: e.target.value})
+    this.setState({addCatagory: e.target.value, responseSuccess : false})
   }
 
   handleSubmit(e) {
@@ -92,17 +97,16 @@ handleOnChange (value) {
         catagory : this.state.multiValue
       })
     }).then(function(response) {
-      if (response.ok) {
-        return response;
+      if(response.ok){
+        this.setState({responseSuccess: true})
       }
-      throw Error(response.statusText);
-    }).then(function(response) {
+      this.forceUpdate()
       return response.json();
-    }).then(function(json) {
-      console.log('Request succeeded with JSON response:', json);
-    }).catch(function(error) {
-      console.log('Request failed:', error.message);
-    });
+    }.bind(this)).then(function(data) {
+      console.log(data)
+    }.bind(this));
+    console.log("hi")
+    console.log(this.state.responseSuccess)
     e.preventDefault();
   }
 
@@ -138,6 +142,7 @@ handleOnChange (value) {
             <input  type="submit" value="Submit" />
           </div>
         </form>
+        {this.state.responseSuccess ? <p>{this.state.title} Added Successfully</p>:null}
       </div>
     )
   }
